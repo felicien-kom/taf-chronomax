@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>CHRONOMAX</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="chronomax">CHRONOMAX</div>
+            <div class="developper">By Le_Felicien</div>
+        </div>
+        <div class="content">
+            <div class="first">
+                <div class="the-time">
+                    <p>
+                        <span class="hours" id="hours">00</span>
+                        <span>:</span>
+                        <span class="minutes" id="minutes">00</span>
+                        <span>:</span>
+                        <span class="seconds" id="seconds">00</span>
+                        <span>:</span>
+                        <span class="miiliseconds" id="milliseconds">000</span>
+                    </p>
+                </div>
+                <div class="options">
+                    <button type="button" class="restart" id="restart" disabled="disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                            <path d="M482-160q-134 0-228-93t-94-227v-7l-64 64-56-56 160-160 160 160-56 56-64-64v7q0 100 70.5 170T482-240q26 0 51-6t49-18l60 60q-38 22-78 33t-82 11Zm278-161L600-481l56-56 64 64v-7q0-100-70.5-170T478-720q-26 0-51 6t-49 18l-60-60q38-22 78-33t82-11q134 0 228 93t94 227v7l64-64 56 56-160 160Z"/>
+                        </svg>
+                        <span class="text-option">Restart</span>
+                    </button>
+                    <button type="button" class="play-pause" id="play-pause">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" id="icon-play">
+                            <path d="m380-300 280-180-280-180v360ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor" class="phidden" id="icon-pause">
+                            <path d="M520-200v-560h240v560H520Zm-320 0v-560h240v560H200Zm400-80h80v-400h-80v400Zm-320 0h80v-400h-80v400Zm0-400v400-400Zm320 0v400-400Z"/>
+                        </svg>
+                        <span class="text-option" id="play-pause-text">Start</span>
+                    </button>
+                    <button type="button" class="take-lap" id="take-lap" disabled="disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                            <path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/>
+                        </svg>
+                        <span class="text-option">Lap</span>
+                    </button>
+                </div>
+            </div>
+            <div class="second">
+                <div class="mini-title">
+                    <h2>Laps</h2>
+                </div>
+                <div class="save-as phidden">
+                    <button type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                            <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/>
+                        </svg>
+                        <span class="text-option">Save as</span>
+                    </button>
+                </div>
+                <div class="laps" id="laps">
+                    <!--
+                    <div class="lap">
+                        <div class="indicator">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                                <path d="M360-840v-80h240v80H360Zm80 440h80v-240h-80v240Zm40 320q-74 0-139.5-28.5T226-186q-49-49-77.5-114.5T120-440q0-74 28.5-139.5T226-694q49-49 114.5-77.5T480-800q62 0 119 20t107 58l56-56 56 56-56 56q38 50 58 107t20 119q0 74-28.5 139.5T734-186q-49 49-114.5 77.5T480-80Zm0-80q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 116 82 198t198 82Zm0-280Z"/>
+                            </svg>
+                            <span class="rank">00</span>
+                        </div>
+                        <div class="value">
+                            <span class="h">00</span>
+                            <span>:</span>
+                            <span class="m">00</span>
+                            <span>:</span>
+                            <span class="s">00</span>
+                            <span>:</span>
+                            <span class="mls">000</span>
+                        </div>
+                    </div>
+                    -->
+                </div>
+                <!--
+                <div class="save-as phidden">
+                    <button type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                            <path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/>
+                        </svg>
+                        <span class="text-option">Save as</span>
+                    </button>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
