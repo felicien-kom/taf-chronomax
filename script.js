@@ -1,60 +1,54 @@
-btnPlayPause = document.getElementById("play-pause");
-btnRestart = document.getElementById("restart");
-btnTakeLap = document.getElementById("take-lap");
-persoInterval = 10;// 10 millisecondes
-iconPlay = document.getElementById("icon-play");
-iconPause = document.getElementById("icon-pause");
-PPText = document.getElementById("play-pause-text");
-btnSaveAs1 = document.getElementsByClassName("save-as")[0];
-//btnSaveAs2 = document.getElementsByClassName("save-as")[1];
+// Recuperation des elements du HTML à manipuler
+var blocLaps = document.getElementById("laps");
+var btnPlayPause = document.getElementById("play-pause");
+var btnRestart = document.getElementById("restart");
+var btnTakeLap = document.getElementById("take-lap");
+var persoInterval = 10;// en millisecondes
+var iconPlay = document.getElementById("icon-play");
+var iconPause = document.getElementById("icon-pause");
+var PPText = document.getElementById("play-pause-text");
+var btnSaveAs = document.getElementsByClassName("save-as")[0];
+var hours = document.getElementById("hours");
+var minutes = document.getElementById("minutes");
+var seconds = document.getElementById("seconds");
+var milliseconds = document.getElementById("milliseconds");
 
-fichierLap = 'LAPS\n\n';
+// Contenu textuel du fichier des laps telecheargeable
+var contenuInitial = 'LAPS\n\n';
+var fichierLap = contenuInitial;
 
-docLaps = document.getElementById("laps");
+var startTime = 0;// Point de depart après chaque lancement ou relancement
+var duration = 0;// Duree ecoulee depuis le dernier startTime
+var durationSave = 0;// Duree enregistrée depuis la dernière pause
+var rank = 1;// Rang des laps
 
-startTime = 0;
-duration = 0;
-durationSave = 0;
-rank = 1;
+// Variable essentielle conditionnant le chronomètre, initialisée à false
+var play = false;// false, car au debut le chrono n'est pas encore lancé
 
-// Variable essentielle conditionnant le chronomètre, comme en étant false
-play = false
-
-// Variable permettant de mattre en pause ou non le chrono
-indicatorPP = null;
+// Variable permettant de controler le rafraichissement ou le gel du chrono
+var indicatorPP = null;
 
 // Tableau des laps
-laps = []
+var laps = [];
 
-hours = document.getElementById("hours");
-minutes = document.getElementById("minutes");
-seconds = document.getElementById("seconds");
-milliseconds = document.getElementById("milliseconds");
+const ONE_HOUR = 3600000;
+const ONE_MINUTE = 60000;
+const ONE_SECOND = 1000;
 
-ONE_HOUR = 3600000
-ONE_MINUTE = 60000
-ONE_SECOND = 1000
-
+// Fonction utile pour bien formater les millisecondes sous 3 chiffres
 function formatMilli(value){
-    if(value > 99){
-        return '' + value;
-    }
-    else if(value > 9){
-        return '0' + value;
-    }
-    else{
-        return '00' + value;
-    }
-}
-function formatSecMinHour(value){
-    if(value > 9){
-        return '' + value;
-    }
-    else{
-        return '0' + value;
-    }
+    if(value > 99){return '' + value;}
+    else if(value > 9){return '0' + value;}
+    else{return '00' + value;}
 }
 
+// Fonction utile pour bien formater les h, m et s sous minimum 2 chiffres
+function formatSecMinHour(value){
+    if(value > 9){return '' + value;}
+    else{return '0' + value;}
+}
+
+// Fonction utilisee pour rafraichir le contenu affiché au chrono 
 function ajustTime(timeValue){
     let mls = timeValue % ONE_SECOND;
     let h = (timeValue / ONE_HOUR);
@@ -65,99 +59,120 @@ function ajustTime(timeValue){
     minutes.textContent = formatSecMinHour(Math.trunc(m));
     hours.textContent = formatSecMinHour(Math.trunc(h));
 }
+// Fonction simple utilisee pour remettre le contenu affiche au chrono a zero lors d'un Restart
 function initialiseChrono(){
     milliseconds.textContent = '000';
     seconds.textContent = '00';
     minutes.textContent = '00';
     hours.textContent = '00';
 }
+// Fonction spéciale pour telecharger sous fichier texte les laps enregistrés
 function downloadLaps(){
-  // Contenu du fichier texte
-  const texte = fichierLap;
+    // Contenu du fichier texte
+    const texte = fichierLap;
 
-  // Création d’un Blob à partir du texte
-  const blob = new Blob([texte], { type: 'text/plain' });
+    // Création d’un Blob à partir du texte
+    const blob = new Blob([texte], { type: 'text/plain' });
 
-  // Création de l’URL temporaire
-  const url = URL.createObjectURL(blob);
+    // Création de l’URL temporaire
+    const url = URL.createObjectURL(blob);
 
-  // Création et configuration d’un lien invisible
-  const a = document.createElement('a');
-  a.href = url;
-  const maintenant = new Date();
-  const jour = maintenant.getDate();
-  const mois = maintenant.getMonth();
-  const annee = maintenant.getFullYear();
-  const heure = maintenant.getHours();
-  const minute = maintenant.getMinutes();
-  const seconde = maintenant.getSeconds();
-  a.download = 'laps_' + annee + '' + mois + '' + jour + '' + heure + '' + minute + '' + seconde + '.txt'; // Nom du fichier
-  document.body.appendChild(a);
-  a.click();
+    // Création et configuration d’un lien invisible
+    const a = document.createElement('a');
+    a.href = url;
 
-  // Nettoyage
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+    // Attribution d'un nom de fichier adapté. Exemple : "laps_20250627084430.txt pour être aussi unique 
+    // et identifiable que possible
+    const maintenant = new Date();
+    const nJour = maintenant.getDate();
+    const nMois = maintenant.getMonth();
+    const nAnnee = maintenant.getFullYear();
+    const nHeure = maintenant.getHours();
+    const nMinute = maintenant.getMinutes();
+    const nSeconde = maintenant.getSeconds();
+    // Nom du fichier à télécharger
+    a.download = 'laps_' + nAnnee + '' + nMois + '' + nJour + '' + nHeure + '' + nMinute + '' + nSeconde + '.txt';
+    
+    // Ajout et execution automatique du lien invisible
+    document.body.appendChild(a);
+    a.click();
+
+    // Nettoyage
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
-
+// Execution lorsqu'on clique sur Play/Pause
 btnPlayPause.addEventListener('click', ()=>{
-    if(!play){
-        //alert("Play !");
+    if(!play){// On veut lancer (ou relancer) le chrono
+        // alert("Play !");
         startTime = Date.now();
-        //ajustTime(2);
+        // ajustTime(2);
         indicatorPP = setInterval(() => {
-            //nowTime = Date.now();
+            // Duree ecoulee depuis la derniere pause
             duration = Date.now() - startTime;
-            //alert(duration);
-            ajustTime(parseInt(durationSave + duration));
-            //console.log('running...');
-        }, persoInterval);
+            // alert(duration);
 
+            // Le temps c'est la duree qui s'est écoulee depuis la dernière pause plus la duree enregistree avant celle-ci
+            ajustTime(parseInt(durationSave + duration));
+            // console.log('running...');
+        }, persoInterval);
+        // Lorsque le chrono tourne, les boutons Restart et Laps sont disponibles
         btnRestart.disabled = false;
         btnTakeLap.disabled = false;
         PPText.innerHTML = 'Pause';
     }
-    else{
+    else{// On veut mettre sur pause
+        // Lorsqu'on pause le chrono, on sauvegarde la duree ecoulee
         durationSave += Date.now() - startTime;
+        // Et on stoppe le rafraichissement du contenu du chrono
         clearInterval(indicatorPP);
-        //console.log('il faut stopper');
+
+        // console.log('il faut stopper');
+
+        // Lorsqu'on pause, on ne prend pas de Laps
         btnTakeLap.disabled = true;
         PPText.innerHTML = 'Play';
     }
+
+    // Dans tous les cas, dès qu'on clique sur ce bouton :
     play = !play;
     iconPlay.classList.toggle('phidden');
     iconPause.classList.toggle('phidden');
 });
 
+// Execution lorsqu'on clique sur Restart
 btnRestart.addEventListener('click', ()=>{
+    // En Restart, on stoppe le rafraichissement du contenu du chrono
     clearInterval(indicatorPP);
-    // Des qu'on restart, on revient dans tous les cas à ceci
+    // Et on remet TOUT à sa valeur initiale
     play = false;
     durationSave = 0;
     initialiseChrono();
-    // on vide le tableau des laps
-    laps = []
-    docLaps.innerHTML = '';
+    laps = [];// On vide le tableau des laps
+    blocLaps.innerHTML = '';
     rank = 1;
-    btnRestart.disabled = true;
+    btnRestart.disabled = true;// Ces boutons sont à nouveaux indisponibles comme au tout départ
     btnTakeLap.disabled = true;
     iconPlay.classList.remove('phidden');
     iconPause.classList.add('phidden');
-    btnSaveAs1.classList.add("phidden");
-    //btnSaveAs2.classList.add("phidden");
+    btnSaveAs.classList.add("phidden");
     PPText.innerHTML = 'Start';
-    fichierLap = 'LAPS\n\n';
+    fichierLap = contenuInitial;
 });
 
+// Execution lorsqu'on clique sur Lap
 btnTakeLap.addEventListener('click', ()=>{
-    if(play){
+    if(play){// Le bouton Lap n'est disponible que lorque le chrono tourne
+        // Enregistrement du temps intermediaire
         let lap = durationSave + Date.now() - startTime;
         let lmls = lap % ONE_SECOND;
         let lh = (lap / ONE_HOUR);
         let lm = (lap % ONE_HOUR) / ONE_MINUTE;
         let ls = ((lap % ONE_HOUR) % ONE_MINUTE) / ONE_SECOND;
+        // Ajout du temps dans le tableau des Laps
         laps.push(lap);
+        // Creation du bloc du Lap à afficher
         let newLap = '<div class="lap">' +
                         '<div class="indicator">' +
                             '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">' +
@@ -171,24 +186,26 @@ btnTakeLap.addEventListener('click', ()=>{
                             '<span class="s">' + formatSecMinHour(Math.trunc(ls)) + '</span><span>:</span>' +
                             '<span class="mls">' + formatMilli(Math.trunc(lmls)) + '</span>' +
                         '</div>';
+        // Ajout du Lap dans le fichier texte telecheargeable    
         fichierLap += 'Rank ' + rank + ' --> ' + '' + formatSecMinHour(Math.trunc(lh)) +
             ':' + formatSecMinHour(Math.trunc(lm)) + ':' + formatSecMinHour(Math.trunc(ls)) +
             ':' + formatMilli(Math.trunc(lmls)) + '\n';
-        //console.log(fichierLap);
-        docLaps.innerHTML +=  newLap;
+        // console.log(fichierLap);
+
+        // Affichage du Lap dans la liste des Laps
+        blocLaps.innerHTML +=  newLap;
+
         // console.log(laps);
-        btnSaveAs1.classList.remove("phidden");
-        //btnSaveAs2.classList.remove("phidden");
+
+        // Disponibilite du bouton de sauvegarde
+        btnSaveAs.classList.remove("phidden");
+        // Incrementation du rang des Laps
         rank += 1;
     }
 });
 
 // Activation du bouton de sauvegarde des laps
-btnSaveAs1.addEventListener('click', ()=>{
+btnSaveAs.addEventListener('click', ()=>{
+    // On execute la fonction de telechargement
     downloadLaps();
-})
-/*
-btnSaveAs2.addEventListener('click', ()=>{
-    downloadLaps();
-})
-*/
+});
