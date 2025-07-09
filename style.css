@@ -283,7 +283,7 @@ a:hover{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1rem;
+        padding: 0 1rem;
         flex: 1;
         background-color: #fdfcfc;
         border-radius: 0;
@@ -355,7 +355,7 @@ a:hover{
         min-width: 80px;
     }
     .first .the-time p span{
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
     .second .mini-title h2{
         font-size: 1.2rem;
@@ -366,6 +366,9 @@ a:hover{
     .header .developper{
         font-size: 0.5rem;
     }
+    .content .first{
+        max-height: 7rem;
+    }
 }
 
 
@@ -373,14 +376,17 @@ a:hover{
     .container{
         padding: 0.5rem;
     }
+    .content .first{
+        max-height: 6rem;
+    }
     #hours, #minutes, #seconds{
-        min-width: 36px;
+        min-width: 40px;
     }
     #milliseconds{
-        min-width: 72px;
+        min-width: 60px;
     }
     .first .the-time p span{
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
     .second .mini-title h2{
         font-size: 1.2rem;
