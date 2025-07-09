@@ -80,7 +80,6 @@ a:hover{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: green;
 }
 .container > div{
     width: 100%;
@@ -280,6 +279,15 @@ a:hover{
 }
 
 @media all and (max-width:1024px) {
+    .container .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        flex: 1;
+        background-color: #fdfcfc;
+        border-radius: 0;
+    }
     .container .content{
         display: flex;
         align-items: center;
