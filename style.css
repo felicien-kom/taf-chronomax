@@ -380,10 +380,10 @@ a:hover{
         max-height: 6rem;
     }
     #hours, #minutes, #seconds{
-        min-width: 40px;
+        min-width: 44px;
     }
     #milliseconds{
-        min-width: 60px;
+        min-width: 64px;
     }
     .first .the-time p span{
         font-size: 2rem;
